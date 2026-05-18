@@ -1,0 +1,894 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <title>Justin Fernandes</title>
+  <!-- Bootstrap 5 CSS + Icons + Google Fonts -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
+  <!-- AOS Animation Library -->
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #f8fafc;
+      color: #0f172a;
+      scroll-behavior: smooth;
+      overflow-x: hidden;
+    }
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #e2e8f0;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #1e5a7a;
+      border-radius: 10px;
+    }
+    .navbar {
+      background: rgba(255,255,255,0.96);
+      backdrop-filter: blur(8px);
+      box-shadow: 0 4px 20px rgba(0,0,0,0.03);
+      padding: 1rem 0;
+      transition: all 0.3s ease;
+    }
+    .navbar.scrolled {
+      padding: 0.6rem 0;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+    }
+    .navbar-brand {
+      font-weight: 800;
+      font-size: 1.7rem;
+      letter-spacing: -0.5px;
+      background: linear-gradient(135deg, #0f2b3d, #1e5a7a);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      transition: transform 0.2s;
+    }
+    .navbar-brand:hover {
+      transform: scale(1.02);
+    }
+    .nav-link {
+      font-weight: 500;
+      color: #1e2a3e;
+      margin: 0 0.25rem;
+      transition: 0.3s;
+      position: relative;
+    }
+    .nav-link::after {
+      content: '';
+      position: absolute;
+      bottom: -5px;
+      left: 50%;
+      width: 0;
+      height: 2px;
+      background: #1e5a7a;
+      transition: 0.3s ease;
+      transform: translateX(-50%);
+    }
+    .nav-link:hover::after {
+      width: 70%;
+    }
+    .nav-link:hover {
+      color: #0d6efd;
+      transform: translateY(-2px);
+    }
+    .hero {
+      background: linear-gradient(145deg, #ffffff 0%, #f1f5f9 100%);
+      padding: 5rem 0 4rem 0;
+      border-bottom: 1px solid #e2e8f0;
+      animation: fadeInUp 0.8s ease-out;
+    }
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(40px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .hero-badge {
+      background: #e6f0ff;
+      color: #0a66b9;
+      padding: 0.3rem 1rem;
+      border-radius: 40px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      display: inline-block;
+      margin-bottom: 1.2rem;
+      transition: all 0.3s;
+    }
+    .hero-badge:hover {
+      transform: scale(1.05);
+      background: #d4e2fc;
+    }
+    .hero h1 {
+      font-weight: 800;
+      font-size: 3.3rem;
+      letter-spacing: -1.5px;
+      background: linear-gradient(120deg, #0c4e6e, #0f2b3d);
+      background-clip: text;
+      -webkit-background-clip: text;
+      color: transparent;
+    }
+    .btn-cyber, .btn-outline-cyber {
+      transition: all 0.3s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+    }
+    .btn-cyber {
+      background: #0f2b3d;
+      border: none;
+      color: white;
+      padding: 0.7rem 1.8rem;
+      border-radius: 40px;
+      font-weight: 500;
+    }
+    .btn-cyber:hover {
+      background: #1e5a7a;
+      transform: translateY(-3px) scale(1.02);
+      box-shadow: 0 12px 20px -8px rgba(15,43,61,0.3);
+      color: white;
+    }
+    .btn-outline-cyber {
+      border: 1.5px solid #0f2b3d;
+      background: transparent;
+      color: #0f2b3d;
+      padding: 0.7rem 1.8rem;
+      border-radius: 40px;
+      font-weight: 500;
+    }
+    .btn-outline-cyber:hover {
+      background: #0f2b3d;
+      color: white;
+      transform: translateY(-3px);
+      box-shadow: 0 12px 20px -8px rgba(15,43,61,0.2);
+    }
+    .section-title {
+      font-weight: 700;
+      font-size: 2rem;
+      position: relative;
+      display: inline-block;
+      margin-bottom: 2rem;
+      letter-spacing: -0.3px;
+    }
+    .section-title:after {
+      content: '';
+      position: absolute;
+      bottom: -12px;
+      left: 0;
+      width: 60px;
+      height: 4px;
+      background: #1e5a7a;
+      border-radius: 4px;
+      transition: width 0.4s ease;
+    }
+    .section-title:hover:after {
+      width: 100%;
+    }
+    .card-project {
+      border: none;
+      border-radius: 1.2rem;
+      background: white;
+      transition: all 0.35s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.02), 0 2px 6px rgba(0,0,0,0.05);
+      height: 100%;
+      overflow: hidden;
+    }
+    .card-project:hover {
+      transform: translateY(-10px) scale(1.01);
+      box-shadow: 0 25px 35px -12px rgba(0,0,0,0.18);
+      border-bottom: 3px solid #1e5a7a;
+    }
+    .skill-tag {
+      background: #eef2ff;
+      padding: 0.4rem 1rem;
+      border-radius: 30px;
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: #1e3a5f;
+      display: inline-block;
+      margin: 0.25rem;
+      transition: all 0.2s;
+    }
+    .skill-tag:hover {
+      background: #1e5a7a;
+      color: white;
+      transform: scale(1.05) translateY(-2px);
+      cursor: default;
+    }
+    .timeline-item {
+      border-left: 3px solid #1e5a7a;
+      padding-left: 1.5rem;
+      margin-bottom: 2rem;
+      transition: transform 0.2s;
+    }
+    .timeline-item:hover {
+      transform: translateX(8px);
+    }
+    .footer {
+      background: #0f172a;
+      color: #cbd5e1;
+      padding: 2rem 0;
+    }
+    .icon-social {
+      color: #cbd5e1;
+      font-size: 1.3rem;
+      transition: 0.25s;
+      margin: 0 0.5rem;
+      display: inline-block;
+    }
+    .icon-social:hover {
+      color: white;
+      transform: translateY(-4px) rotate(5deg);
+    }
+    .cert-card {
+      background: white;
+      border-radius: 1rem;
+      padding: 1rem 1.2rem;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+      border: 1px solid #eef2ff;
+      transition: all 0.25s;
+    }
+    .cert-card:hover {
+      transform: translateX(6px);
+      border-left: 4px solid #1e5a7a;
+      box-shadow: 0 12px 20px -12px rgba(0,0,0,0.1);
+    }
+    .floating-shape {
+      position: absolute;
+      z-index: 0;
+      opacity: 0.03;
+      pointer-events: none;
+    }
+    @keyframes float {
+      0% { transform: translateY(0px); }
+      50% { transform: translateY(-12px); }
+      100% { transform: translateY(0px); }
+    }
+    .float-animation {
+      animation: float 5s ease-in-out infinite;
+    }
+    .contact-form-card {
+      background: white;
+      border-radius: 1.5rem;
+      overflow: hidden;
+      transition: all 0.3s;
+    }
+    .form-control, .form-select {
+      border: 1px solid #e2e8f0;
+      border-radius: 0.75rem;
+      padding: 0.75rem 1rem;
+      font-size: 0.95rem;
+      transition: all 0.2s;
+    }
+    .form-control:focus, .form-select:focus {
+      border-color: #1e5a7a;
+      box-shadow: 0 0 0 3px rgba(30,90,122,0.15);
+      outline: none;
+    }
+    .submit-btn {
+      background: #0f2b3d;
+      color: white;
+      border: none;
+      padding: 0.8rem 2rem;
+      border-radius: 50px;
+      font-weight: 600;
+      transition: all 0.3s;
+    }
+    .submit-btn:hover:not(:disabled) {
+      background: #1e5a7a;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(15,43,61,0.25);
+    }
+    .submit-btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+    .contact-info-card {
+      background: linear-gradient(135deg, #0f2b3d, #1e5a7a);
+      border-radius: 1.5rem;
+      color: white;
+      height: 100%;
+    }
+    .toast-message {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      z-index: 1100;
+      background: #1e5a7a;
+      color: white;
+      padding: 12px 24px;
+      border-radius: 50px;
+      font-weight: 500;
+      box-shadow: 0 10px 25px -5px rgba(0,0,0,0.2);
+      transform: translateX(400px);
+      transition: transform 0.3s ease;
+    }
+    .toast-message.show {
+      transform: translateX(0);
+    }
+    .toast-message.error {
+      background: #dc3545;
+    }
+    .toast-message.success {
+      background: #28a745;
+    }
+    .skills-container {
+      max-height: 320px;
+      overflow-y: auto;
+      padding-right: 5px;
+    }
+    .skills-container::-webkit-scrollbar {
+      width: 4px;
+    }
+    .skills-container::-webkit-scrollbar-track {
+      background: #e2e8f0;
+      border-radius: 10px;
+    }
+    .skills-container::-webkit-scrollbar-thumb {
+      background: #1e5a7a;
+      border-radius: 10px;
+    }
+    .achievement-card {
+      background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+      border-left: 4px solid #ffc107;
+      transition: all 0.3s;
+    }
+    .achievement-card:hover {
+      transform: translateX(8px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    }
+    .org-badge {
+      background: #eef2ff;
+      color: #1e5a7a;
+      font-size: 0.7rem;
+      padding: 2px 8px;
+      border-radius: 20px;
+      display: inline-block;
+      margin-left: 8px;
+    }
+    .project-link {
+      text-decoration: none;
+      color: inherit;
+      display: block;
+      height: 100%;
+    }
+    .project-link:hover {
+      text-decoration: none;
+      color: inherit;
+    }
+    @media (max-width: 768px) {
+      .hero h1 { font-size: 2.4rem; }
+      .section-title { font-size: 1.8rem; }
+      .toast-message {
+        bottom: 20px;
+        right: 20px;
+        left: 20px;
+        text-align: center;
+        transform: translateY(100px);
+      }
+      .toast-message.show { transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg sticky-top" id="mainNav">
+  <div class="container">
+    <a class="navbar-brand" href="#">Justin Fernandes</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMain">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarMain">
+      <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+        <li class="nav-item"><a class="nav-link" href="#home">Home</a></li>
+        <li class="nav-item"><a class="nav-link" href="#projects">Projects</a></li>
+        <li class="nav-item"><a class="nav-link" href="#experience">Experience</a></li>
+        <li class="nav-item"><a class="nav-link" href="#certifications">Certifications</a></li>
+        <li class="nav-item"><a class="nav-link" href="#achievements">Achievements</a></li>
+        <li class="nav-item"><a class="nav-link" href="#contact">Contact</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<section id="home" class="hero position-relative overflow-hidden">
+  <div class="floating-shape" style="top: 20%; left: -30px; font-size: 100px;"><i class="fas fa-shield-alt"></i></div>
+  <div class="container position-relative">
+    <div class="row align-items-center gy-5">
+      <div class="col-lg-8" data-aos="fade-right" data-aos-duration="1000">
+        <div class="hero-badge"><i class="fas fa-shield-alt me-1"></i> Cybersecurity Enthusiast & Full Stack Developer</div>
+        <h1>Justin Fernandes</h1>
+        <p class="lead mt-3 text-secondary">Aspiring Cybersecurity Professional | Full Stack & Blockchain Developer | Ethical Hacking Enthusiast</p>
+        <div class="d-flex flex-wrap gap-3 mt-4">
+          <a href="#projects" class="btn btn-cyber"><i class="fas fa-code-branch me-2"></i>View Projects</a>
+          <a href="#contact" class="btn btn-outline-cyber"><i class="fas fa-envelope me-2"></i>Contact Me</a>
+        </div>
+        <div class="mt-4">
+          <span class="me-3"><i class="fas fa-map-marker-alt text-secondary me-1"></i> Mumbai, India</span>
+          <span><i class="fas fa-phone-alt text-secondary me-1"></i> +91 7208754076</span>
+        </div>
+        <div class="mt-2">
+          <a href="https://github.com/Justin22223" class="text-decoration-none text-dark me-3" target="_blank" rel="noopener noreferrer"><i class="fab fa-github fa-lg"></i> GitHub</a>
+          <a href="https://www.linkedin.com/in/justin-fernandes-848459247/" class="text-decoration-none text-dark" target="_blank" rel="noopener noreferrer"><i class="fab fa-linkedin fa-lg"></i> LinkedIn</a>
+        </div>
+      </div>
+      <div class="col-lg-4 text-center" data-aos="fade-left" data-aos-duration="1000" data-aos-delay="200">
+        <div class="bg-white p-4 rounded-4 shadow-sm d-inline-block float-animation" style="animation-duration: 4s;">
+          <i class="fas fa-user-secret fa-4x" style="color: #1e5a7a;"></i>
+          <p class="mt-2 fw-semibold">"Protecting digital ecosystems with innovation"</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="container mt-5" data-aos="fade-up" data-aos-duration="800">
+  <div class="bg-white p-4 rounded-4 shadow-sm border-0">
+    <h3 class="fw-bold"><i class="fas fa-bullseye me-2" style="color:#1e5a7a"></i> Career Objective</h3>
+    <p class="mb-0 text-secondary-emphasis fs-6">To build a successful career in the field of Cybersecurity by applying my technical skills in network security, ethical hacking, threat analysis, and secure system development while continuously learning new technologies and contributing to the protection of digital systems and data.</p>
+  </div>
+</div>
+
+<div class="container mt-5">
+  <div class="row g-4">
+    <div class="col-md-6" data-aos="fade-right" data-aos-duration="800">
+      <div class="bg-white p-4 rounded-4 h-100 shadow-sm">
+        <h3 class="fw-bold"><i class="fas fa-graduation-cap me-2"></i> Education</h3>
+        <div class="timeline-item">
+          <h5 class="fw-semibold">Bachelor of Engineering (B.E), Computer Science</h5>
+          <p class="text-muted mb-1">Xavier Institute of Engineering, Mumbai</p>
+          <span class="badge bg-secondary-subtle text-dark">2024 – Present</span>
+        </div>
+        <div class="timeline-item">
+          <h5 class="fw-semibold">Diploma in Computer Science & Engineering</h5>
+          <p class="text-muted mb-1">Government Polytechnic Mumbai</p>
+          <span class="badge bg-secondary-subtle text-dark">Percentage: 82.15%</span>
+        </div>
+        <div class="timeline-item">
+          <h5 class="fw-semibold">Secondary (X), Maharashtra Board</h5>
+          <p class="text-muted mb-1">Sacred Heart Boys High School</p>
+          <span class="badge bg-secondary-subtle text-dark">Percentage: 78.00%</span>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6" data-aos="fade-left" data-aos-duration="800">
+      <div class="bg-white p-4 rounded-4 h-100 shadow-sm">
+        <h3 class="fw-bold"><i class="fas fa-code me-2"></i> Technical Arsenal</h3>
+        <div class="skills-container">
+          <h5 class="fs-6 fw-semibold mt-2 mb-2"><i class="fas fa-laptop-code me-1"></i> Programming Languages</h5>
+          <div><span class="skill-tag">Python</span><span class="skill-tag">Java</span><span class="skill-tag">JavaScript</span><span class="skill-tag">C Programming</span><span class="skill-tag">C++ Programming</span><span class="skill-tag">PHP</span></div>
+          <h5 class="fs-6 fw-semibold mt-3 mb-2"><i class="fas fa-globe me-1"></i> Frontend & Styling</h5>
+          <div><span class="skill-tag">HTML</span><span class="skill-tag">CSS</span><span class="skill-tag">Tailwind CSS</span><span class="skill-tag">React</span><span class="skill-tag">Next.js</span><span class="skill-tag">Graphics Design</span></div>
+          <h5 class="fs-6 fw-semibold mt-3 mb-2"><i class="fas fa-database me-1"></i> Databases & Backend</h5>
+          <div><span class="skill-tag">SQL</span><span class="skill-tag">MongoDB</span><span class="skill-tag">MySQL</span></div>
+          <h5 class="fs-6 fw-semibold mt-3 mb-2"><i class="fas fa-vial me-1"></i> API Testing Tools</h5>
+          <div><span class="skill-tag">Postman</span><span class="skill-tag">Thunder Client</span></div>
+          <h5 class="fs-6 fw-semibold mt-3 mb-2"><i class="fas fa-check-double me-1"></i> Testing & QA</h5>
+          <div><span class="skill-tag">Software Testing</span><span class="skill-tag">Manual Testing</span></div>
+          <h5 class="fs-6 fw-semibold mt-3 mb-2"><i class="fas fa-network-wired me-1"></i> Networking & Security</h5>
+          <div><span class="skill-tag">Computer Networking</span><span class="skill-tag">Network Security</span><span class="skill-tag">Ethical Hacking</span><span class="skill-tag">Threat Analysis</span></div>
+          <h5 class="fs-6 fw-semibold mt-3 mb-2"><i class="fas fa-cogs me-1"></i> Other Expertise</h5>
+          <div><span class="skill-tag">Blockchain (Solidity)</span><span class="skill-tag">OpenCV</span><span class="skill-tag">Flask</span><span class="skill-tag">Git/GitHub</span><span class="skill-tag">LaTeX</span><span class="skill-tag">Blender</span><span class="skill-tag">Linux</span><span class="skill-tag">NLP</span><span class="skill-tag">Speech Recognition</span></div>
+        </div>
+        <div class="mt-3 pt-2 border-top">
+          <span class="badge bg-primary bg-opacity-10 text-dark p-2"><i class="fas fa-check-circle text-success me-1"></i> 27+ Technical Skills</span>
+          <span class="badge bg-primary bg-opacity-10 text-dark p-2 ms-2"><i class="fas fa-rocket me-1"></i> Full Stack Ready</span>
+          <span class="badge bg-primary bg-opacity-10 text-dark p-2 ms-2"><i class="fas fa-bug me-1"></i> QA & Testing</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<section id="projects" class="container mt-5 pt-2">
+  <h2 class="section-title" data-aos="fade-up"><i class="fas fa-laptop-code me-2"></i> Featured Projects</h2>
+  <div class="row g-4 mt-1">
+    <div class="col-md-6 col-lg-4" data-aos="zoom-in" data-aos-duration="600">
+      <div class="card-project p-3">
+        <div class="d-flex align-items-center mb-2"><i class="fas fa-microphone-alt fa-2x me-2" style="color:#2c6e9e"></i> <span class="badge bg-dark">AI / Voice Assistant</span></div>
+        <h4 class="fs-5 fw-bold">Virtual Assistant ↗</h4>
+        <p class="small text-secondary">Sep 2023 - Oct 2023</p>
+        <p class="small">Intelligent and user-friendly assistant designed to respond to natural language commands and perform various tasks. Leveraging cutting-edge technologies such as natural language processing and speech recognition to simplify user interactions and enhance productivity.</p>
+        <div><span class="skill-tag">Python</span><span class="skill-tag">NLP</span><span class="skill-tag">Speech Recognition</span><span class="skill-tag">Task Automation</span></div>
+      </div>
+    </div>
+    <div class="col-md-6 col-lg-4" data-aos="zoom-in" data-aos-duration="600" data-aos-delay="100">
+      <div class="card-project p-3">
+        <div class="d-flex align-items-center mb-2"><i class="fas fa-shield-alt fa-2x me-2" style="color:#d9534f"></i> <span class="badge bg-dark">Women Safety</span></div>
+        <h4 class="fs-5 fw-bold">Women-Safety ↗</h4>
+        <p class="small text-secondary">Jan 2026 - Present</p>
+        <p class="small">Voice-activated, hands-free emergency alert system for women's safety. Enables immediate connection to trusted contacts and police control rooms during emergencies when manual phone use is difficult or impossible.</p>
+        <div><span class="skill-tag">Voice Recognition</span><span class="skill-tag">Real-time Tracking</span><span class="skill-tag">Emergency Alerts</span><span class="skill-tag">API Integration</span></div>
+      </div>
+    </div>
+    <div class="col-md-6 col-lg-4" data-aos="zoom-in" data-aos-duration="600" data-aos-delay="200">
+      <div class="card-project p-3">
+        <div class="d-flex align-items-center mb-2"><i class="fas fa-link fa-2x me-2" style="color:#2c6e9e"></i> <span class="badge bg-dark">Blockchain</span></div>
+        <h4 class="fs-5 fw-bold">Fake FIR Detection</h4>
+        <p class="small text-secondary">Jan 2026 - Apr 2026</p>
+        <p class="small">Secure & transparent system using Solidity + Ganache to prevent tampered FIR records. Python Flask backend, MySQL, HTML frontend.</p>
+        <div><span class="skill-tag">Solidity</span><span class="skill-tag">Flask</span><span class="skill-tag">Ganache</span><span class="skill-tag">MySQL</span></div>
+      </div>
+    </div>
+    <div class="col-md-6 col-lg-4" data-aos="zoom-in" data-aos-duration="600" data-aos-delay="300">
+      <div class="card-project p-3">
+        <div class="d-flex align-items-center mb-2"><i class="fas fa-shield-virus fa-2x me-2" style="color:#d9534f"></i> <span class="badge bg-dark">Cybersecurity</span></div>
+        <h4 class="fs-5 fw-bold">Fraud Website Detector</h4>
+        <p class="small text-secondary">2024 – Aug 2024</p>
+        <p class="small">Phishing & malicious site detection using SSL certs, URL pattern analysis. React frontend + Python Flask.</p>
+        <div><span class="skill-tag">React</span><span class="skill-tag">Python</span><span class="skill-tag">Flask</span></div>
+      </div>
+    </div>
+    <div class="col-md-6 col-lg-4" data-aos="zoom-in" data-aos-duration="600" data-aos-delay="400">
+      <div class="card-project p-3">
+        <div class="d-flex align-items-center mb-2"><i class="fas fa-chart-line fa-2x me-2" style="color:#2c6e9e"></i> <span class="badge bg-dark">FinTech</span></div>
+        <h4 class="fs-5 fw-bold">Expense Tracker</h4>
+        <p class="small text-secondary">Apr 2025 - Jun 2025</p>
+        <p class="small">Financial management app with transaction categorization, spending analytics & graphical reports.</p>
+        <div><span class="skill-tag">React</span><span class="skill-tag">Tailwind</span><span class="skill-tag">Flask</span></div>
+      </div>
+    </div>
+    <div class="col-md-6 col-lg-4" data-aos="zoom-in" data-aos-duration="600" data-aos-delay="500">
+      <div class="card-project p-3">
+        <div class="d-flex align-items-center mb-2"><i class="fas fa-robot fa-2x me-2" style="color:#2c6e9e"></i> <span class="badge bg-dark">AI / NLP</span></div>
+        <h4 class="fs-5 fw-bold">QueryMate</h4>
+        <p class="small text-secondary">Jul 2023 - Oct 2023</p>
+        <p class="small">Intelligent Q&A system trained on custom dataset, context understanding & accurate responses.</p>
+        <div><span class="skill-tag">NLP</span><span class="skill-tag">AI</span><span class="skill-tag">Python</span></div>
+      </div>
+    </div>
+    <div class="col-md-6 col-lg-4" data-aos="zoom-in" data-aos-duration="600" data-aos-delay="600">
+      <div class="card-project p-3">
+        <div class="d-flex align-items-center mb-2"><i class="fas fa-hand-peace fa-2x me-2" style="color:#2c6e9e"></i> <span class="badge bg-dark">Computer Vision</span></div>
+        <h4 class="fs-5 fw-bold">Gesture-Mouse-Control</h4>
+        <p class="small text-secondary">Dec 2023</p>
+        <p class="small">Hands-free mouse system using OpenCV & Python, translating hand gestures to cursor actions.</p>
+        <div><span class="skill-tag">OpenCV</span><span class="skill-tag">Python</span><span class="skill-tag">NumPy</span></div>
+      </div>
+    </div>
+    <div class="col-md-6 col-lg-4" data-aos="zoom-in" data-aos-duration="600" data-aos-delay="700">
+      <div class="card-project p-3">
+        <div class="d-flex align-items-center mb-2"><i class="fas fa-id-card fa-2x me-2" style="color:#2c6e9e"></i> <span class="badge bg-dark">Biometrics</span></div>
+        <h4 class="fs-5 fw-bold">Face Recognition</h4>
+        <p class="small text-secondary">Oct 2023 - Nov 2023</p>
+        <p class="small">Python OpenCV based facial recognition and verification. Real-time identification for security.</p>
+        <div><span class="skill-tag">OpenCV</span><span class="skill-tag">Python</span><span class="skill-tag">Real-time</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="experience" class="container mt-5">
+  <div class="row g-4">
+    <div class="col-md-6" data-aos="fade-right" data-aos-duration="800">
+      <div class="bg-white p-4 rounded-4 shadow-sm h-100">
+        <h3 class="fw-bold"><i class="fas fa-briefcase me-2"></i> Work Experience</h3>
+        <div class="mt-3">
+          <div class="border-start border-3 border-primary ps-3 py-1">
+            <h5 class="fw-semibold">Full Stack Development Intern</h5>
+            <p class="text-muted mb-1">Alt-PI, Mumbai</p>
+            <p class="small">Collaborated on full stack web applications, built scalable backend modules with Flask, integrated frontend components, performed API testing using Postman & Thunder Client, and improved system reliability. Completed a comprehensive Full Stack Development Internship focusing on frontend and backend development, database integration, and web application development using modern technologies.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6" data-aos="fade-left" data-aos-duration="800">
+      <div class="bg-white p-4 rounded-4 shadow-sm h-100">
+        <h3 class="fw-bold"><i class="fas fa-certificate me-2"></i> Certifications & Training</h3>
+        <div class="cert-card mb-2">
+          <i class="fas fa-code me-2 text-warning"></i> <strong>PHP and MySQL</strong>
+          <span class="org-badge">IIT Bombay</span><br>
+          <span class="text-secondary small">Comprehensive web development training from Indian Institute of Technology Bombay</span>
+        </div>
+        <div class="cert-card mb-2">
+          <i class="fas fa-cube me-2 text-primary"></i> <strong>Blender Training</strong>
+          <span class="org-badge">IIT Bombay</span><br>
+          <span class="text-secondary small">3D modeling and animation certification from IIT Bombay</span>
+        </div>
+        <div class="cert-card mb-2">
+          <i class="fab fa-linux me-2 text-success"></i> <strong>Linux Training</strong>
+          <span class="org-badge">IIT Bombay</span><br>
+          <span class="text-secondary small">System administration and command line training from IIT Bombay</span>
+        </div>
+        <div class="cert-card mb-2">
+          <i class="fas fa-superscript me-2 text-secondary"></i> <strong>LaTeX Training</strong>
+          <span class="org-badge">IIT Bombay</span><br>
+          <span class="text-secondary small">Document preparation and typesetting certification from IIT Bombay</span>
+        </div>
+        <div class="cert-card mb-2">
+          <i class="fas fa-database me-2 text-info"></i> <strong>MongoDB Schemas, Indexes & Queries</strong>
+          <span class="org-badge">Infosys</span><br>
+          <span class="text-secondary small">Infosys Springboard certification on MongoDB database management</span>
+        </div>
+        <div class="cert-card mb-2">
+          <i class="fas fa-user-graduate me-2 text-primary"></i> <strong>Smart IT Professional Master Class</strong>
+          <span class="org-badge">Modern Solution Hub</span><br>
+          <span class="text-secondary small">Professional development in IT from Modern Solution Hub</span>
+        </div>
+        <div class="cert-card mb-2">
+          <i class="fas fa-palette me-2 text-info"></i> <strong>Graphics Design</strong>
+          <span class="org-badge">Skill India</span><br>
+          <span class="text-secondary small">Visual design and creative software certification under Skill India initiative</span>
+        </div>
+        <div class="cert-card mb-2">
+          <i class="fas fa-shield-alt me-2 text-danger"></i> <strong>Ethical Hacking Course</strong>
+          <span class="org-badge">Younity</span><br>
+          <span class="text-secondary small">Comprehensive cybersecurity and penetration testing from Younity</span>
+        </div>
+        <div class="cert-card mb-2">
+          <i class="fas fa-leaf me-2 text-success"></i> <strong>Green Skills And Artificial Intelligence</strong><br>
+          <span class="text-secondary small">Edunet, Mumbai | Sep 2025 - Oct 2025</span>
+        </div>
+        <div class="cert-card mb-2">
+          <i class="fas fa-brain me-2 text-primary"></i> <strong>Cybersecurity Foundation & Ethical Hacking Workshop</strong><br>
+          <span class="text-secondary small">Self-paced & hands-on labs (Network security, threat analysis)</span>
+        </div>
+        <div class="cert-card">
+          <i class="fas fa-flask me-2 text-info"></i> <strong>API Testing with Postman & Thunder Client</strong><br>
+          <span class="text-secondary small">Comprehensive REST API testing, automation, and debugging</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="certifications" class="container mt-5" data-aos="flip-up" data-aos-duration="900">
+  <div class="bg-white rounded-4 p-4 shadow-sm">
+    <h3 class="fw-bold"><i class="fas fa-medal me-2"></i> Certifications & Skills Highlights</h3>
+    <div class="row mt-3">
+      <div class="col-md-6">
+        <ul class="list-unstyled">
+          <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i> PHP and MySQL – <strong>IIT Bombay</strong></li>
+          <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i> Blender Training – <strong>IIT Bombay</strong></li>
+          <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i> Linux Training – <strong>IIT Bombay</strong></li>
+          <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i> LaTeX Training – <strong>IIT Bombay</strong></li>
+          <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i> MongoDB Schemas, Indexes & Queries – <strong>Infosys</strong></li>
+          <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i> Smart IT Professional Master Class – <strong>Modern Solution Hub</strong></li>
+        </ul>
+      </div>
+      <div class="col-md-6">
+        <ul class="list-unstyled">
+          <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i> Graphics Design – <strong>Skill India</strong></li>
+          <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i> Ethical Hacking Course – <strong>Younity</strong></li>
+          <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i> Green Skills & AI – Edunet (Sep 2025)</li>
+          <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i> Blockchain Basics: Solidity & Smart Contracts</li>
+          <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i> Python for Cybersecurity (Flask, threat detection)</li>
+          <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i> OpenCV - Master Computer Vision Projects</li>
+        </ul>
+      </div>
+    </div>
+    <div class="alert alert-light border mt-3 small">
+      <i class="fas fa-shield-heart me-2"></i> <strong>Cybersecurity interests:</strong> Network defense, Penetration testing fundamentals, Threat Intelligence, Secure SDLC, and Blockchain for data integrity.
+    </div>
+  </div>
+</section>
+
+<section id="achievements" class="container mt-5" data-aos="fade-up" data-aos-duration="800">
+  <div class="bg-white rounded-4 p-4 shadow-sm">
+    <h3 class="fw-bold"><i class="fas fa-trophy me-2" style="color:#ffc107;"></i> Achievements & Hackathons</h3>
+    <div class="row mt-3">
+      <div class="col-12">
+        <div class="achievement-card p-3 mb-3 rounded-3">
+          <div class="d-flex align-items-start gap-3">
+            <i class="fas fa-medal fa-2x" style="color:#ffc107;"></i>
+            <div>
+              <h5 class="fw-bold mb-1">🥇 Women Safety Hackathon Winner</h5>
+              <p class="mb-0 small">Won the App Development domain in a 24-hour Women Safety Hackathon by building an innovative safety app with emergency features. Worked on coding, UI design, testing, and teamwork while enhancing problem-solving and app development skills.</p>
+            </div>
+          </div>
+        </div>
+        <div class="achievement-card p-3 rounded-3">
+          <div class="d-flex align-items-start gap-3">
+            <i class="fas fa-award fa-2x" style="color:#ffc107;"></i>
+            <div>
+              <h5 class="fw-bold mb-1">🏆 Full Stack Development Excellence</h5>
+              <p class="mb-0 small">Completed a comprehensive Full Stack Development Internship at Alt-Pi, demonstrating proficiency in frontend and backend development, database integration, and modern web application technologies.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="contact" class="container my-5">
+  <div class="text-center mb-5" data-aos="fade-up">
+    <h2 class="section-title"><i class="fas fa-paper-plane me-2"></i> Get In Touch</h2>
+    <p class="text-secondary mx-auto" style="max-width: 600px;">Have a project in mind, a job opportunity, or just want to connect? I'd love to hear from you!</p>
+  </div>
+  <div class="row g-4">
+    <div class="col-lg-7" data-aos="fade-right" data-aos-duration="800">
+      <div class="contact-form-card p-4 shadow-sm">
+        <h3 class="fw-bold mb-4"><i class="fas fa-envelope-open-text me-2" style="color:#1e5a7a;"></i> Send a Message</h3>
+        <form id="contactForm">
+          <div class="row g-3">
+            <div class="col-md-6">
+              <label class="form-label fw-semibold">Full Name <span class="text-danger">*</span></label>
+              <input type="text" class="form-control" id="nameInput" required>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label fw-semibold">Email Address <span class="text-danger">*</span></label>
+              <input type="email" class="form-control" id="emailInput" required>
+            </div>
+            <div class="col-12">
+              <label class="form-label fw-semibold">Subject</label>
+              <input type="text" class="form-control" id="subjectInput" placeholder="Collaboration / Job Opportunity / Question">
+            </div>
+            <div class="col-12">
+              <label class="form-label fw-semibold">Message <span class="text-danger">*</span></label>
+              <textarea class="form-control" id="messageInput" rows="5" required></textarea>
+            </div>
+            <div class="col-12">
+              <button type="submit" class="submit-btn" id="submitBtn"><i class="fas fa-paper-plane me-2"></i>Send Message</button>
+            </div>
+          </div>
+        </form>
+        <p class="small text-muted mt-3"><i class="fas fa-lock me-1"></i> Your information will not be shared. I'll get back to you within 24-48 hours.</p>
+      </div>
+    </div>
+    <div class="col-lg-5" data-aos="fade-left" data-aos-duration="800">
+      <div class="contact-info-card p-4 h-100 d-flex flex-column">
+        <div class="mb-4">
+          <i class="fas fa-comment-dots fa-2x mb-3"></i>
+          <h3 class="fw-bold text-white mb-2">Let's Talk</h3>
+          <p class="text-white-50">I'm currently open to cybersecurity roles, full stack development opportunities, freelance projects, and research collaborations.</p>
+        </div>
+        <div class="mb-4">
+          <h5 class="fw-semibold text-white"><i class="fas fa-bullhorn me-2"></i> Quick Response For:</h5>
+          <div class="d-flex flex-wrap gap-2 mt-2">
+            <span class="badge bg-white text-dark py-2 px-3 rounded-pill">💼 Job Offers</span>
+            <span class="badge bg-white text-dark py-2 px-3 rounded-pill">🔒 Security Consulting</span>
+            <span class="badge bg-white text-dark py-2 px-3 rounded-pill">🤝 Collaborations</span>
+            <span class="badge bg-white text-dark py-2 px-3 rounded-pill">🚀 Open Source</span>
+          </div>
+        </div>
+        <div class="mt-auto">
+          <hr class="bg-white-50">
+          <div class="d-flex align-items-center gap-3 mb-3">
+            <i class="fas fa-envelope fa-lg"></i>
+            <span>justin.fds2005@gmail.com</span>
+          </div>
+          <div class="d-flex align-items-center gap-3 mb-3">
+            <i class="fas fa-phone-alt fa-lg"></i>
+            <span>+91 7208754076</span>
+          </div>
+          <div class="d-flex align-items-center gap-3">
+            <i class="fas fa-map-marker-alt fa-lg"></i>
+            <span>Mumbai, India (Open to Remote)</span>
+          </div>
+          <div class="mt-4">
+            <p class="small text-white-50 mb-2">Connect on socials:</p>
+            <div>
+              <a href="https://www.linkedin.com/in/justin-fernandes-848459247/" target="_blank" rel="noopener noreferrer" class="icon-social text-white me-3"><i class="fab fa-linkedin fa-lg"></i></a>
+              <a href="https://github.com/Justin22223" target="_blank" rel="noopener noreferrer" class="icon-social text-white me-3"><i class="fab fa-github fa-lg"></i></a>
+              <a href="https://x.com/Justin_fds2005" target="_blank" rel="noopener noreferrer" class="icon-social text-white me-3">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor" style="display: inline-block; vertical-align: middle;">
+                  <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+                </svg>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="container text-center">
+    <p class="mb-0 small">© 2026 Justin Fernandes — Full Stack Developer | Cybersecurity Enthusiast</p>
+    <p class="mt-2 small text-white-50"><i class="fas fa-laptop-code"></i> "Secure Systems, Ethical Hacking, Full Stack Innovation"</p>
+  </div>
+</footer>
+
+<div id="toastMsg" class="toast-message">
+  <i class="fas fa-check-circle me-2"></i> Thank you! I'll get back to you soon.
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+<script>
+  AOS.init({ duration: 800, once: true, offset: 100 });
+
+  window.addEventListener('scroll', function() {
+    const navbar = document.getElementById('mainNav');
+    if (window.scrollY > 50) navbar.classList.add('scrolled');
+    else navbar.classList.remove('scrolled');
+  });
+
+  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function(e) {
+      const targetId = this.getAttribute('href');
+      if(targetId === "#") return;
+      const targetElem = document.querySelector(targetId);
+      if(targetElem) {
+        e.preventDefault();
+        targetElem.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    });
+  });
+
+  // Contact form handler using your backend API
+  const contactForm = document.getElementById('contactForm');
+  const toastMsg = document.getElementById('toastMsg');
+  const submitBtn = document.getElementById('submitBtn');
+
+  function showToastMessage(message, isError = false) {
+    toastMsg.innerHTML = isError ? `<i class="fas fa-exclamation-circle me-2"></i> ${message}` : `<i class="fas fa-check-circle me-2"></i> ${message}`;
+    toastMsg.classList.remove('error', 'success');
+    toastMsg.classList.add(isError ? 'error' : 'success');
+    toastMsg.classList.add('show');
+    setTimeout(() => toastMsg.classList.remove('show'), 5000);
+  }
+
+  if (contactForm) {
+    contactForm.addEventListener('submit', async function(e) {
+      e.preventDefault();
+      
+      const name = document.getElementById('nameInput').value.trim();
+      const email = document.getElementById('emailInput').value.trim();
+      const subject = document.getElementById('subjectInput').value.trim();
+      const message = document.getElementById('messageInput').value.trim();
+      
+      // Validation
+      if (!name || name.length < 2) {
+        showToastMessage('Please enter your full name', true);
+        return;
+      }
+      
+      if (!email || !email.includes('@')) {
+        showToastMessage('Please enter a valid email address', true);
+        return;
+      }
+      
+      if (!message || message.length < 5) {
+        showToastMessage('Message must be at least 5 characters', true);
+        return;
+      }
+      
+      // Disable button and show loading
+      const originalText = submitBtn.innerHTML;
+      submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Sending...';
+      submitBtn.disabled = true;
+      
+      try {
+        // Send to your backend API
+        const response = await fetch('http://localhost:5000/api/contact', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            name: name,
+            email: email,
+            subject: subject || 'Portfolio Contact',
+            message: message
+          })
+        });
+        
+        const data = await response.json();
+        
+        if (data.success) {
+          showToastMessage(data.message || 'Message sent successfully! I\'ll get back to you soon.');
+          contactForm.reset();
+        } else {
+          showToastMessage(data.message || 'Failed to send message. Please try again.', true);
+        }
+      } catch (error) {
+        console.error('Error:', error);
+        showToastMessage('Unable to connect to server. Please make sure the backend is running on port 5000', true);
+      } finally {
+        // Reset button
+        submitBtn.innerHTML = originalText;
+        submitBtn.disabled = false;
+      }
+    });
+  }
+</script>
+</body>
+</html>
