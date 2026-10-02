@@ -1,5 +1,17 @@
 {
-  "routes": [
-    { "src": "/(.*)", "dest": "/Frontend/index.html" }
+  "functions": {
+    "server.js": {
+      "runtime": "nodejs18.x"
+    }
+  },
+  "rewrites": [
+    {
+      "source": "/api/(.*)",
+      "destination": "/server.js"
+    },
+    {
+      "source": "/(.*)",
+      "destination": "/Frontend/index.html"
+    }
   ]
 }

@@ -1,80 +1,59 @@
-// server.js - Complete Backend with MongoDB + Email Notifications
-// For Justin Fernandes Portfolio
-
 const express = require('express');
-const mongoose = require('mongoose');
 const cors = require('cors');
 const nodemailer = require('nodemailer');
+const path = require('path');
+const { initializeApp } = require('firebase/app');
+const { getFirestore, collection, addDoc, serverTimestamp } = require('firebase/firestore');
+
+const firebaseConfig = {
+    apiKey: "AIzaSyDDDKd9Ec3X7PlEeh9FWOCuJEOa5Vpc2Eo",
+    authDomain: "portfolio-8d414.firebaseapp.com",
+    projectId: "portfolio-8d414",
+    storageBucket: "portfolio-8d414.firebasestorage.app",
+    messagingSenderId: "1026452228316",
+    appId: "1:1026452228316:web:af5e6fd81c12e76221cc19",
+    measurementId: "G-JR983GXVBM"
+};
+
+const firebaseApp = initializeApp(firebaseConfig);
+const db = getFirestore(firebaseApp);
 
 const app = express();
 const PORT = 5000;
 
-// ============================================
-// CONFIGURATION
-// ============================================
-
-// MongoDB Connection (Local)
-const MONGODB_URI = 'mongodb://localhost:27017/justin_portfolio';
-
-// Email Configuration
-const EMAIL_USER = 'justin.fds2005@gmail.com';
-const EMAIL_PASS = 'jozdzlhmcvuxemxy'; // Your App Password (no spaces)
-
-// ============================================
-// MIDDLEWARE
-// ============================================
+// Middleware
 app.use(cors());
 app.use(express.json());
 
-// ============================================
-// MONGODB SCHEMA
-// ============================================
-const contactSchema = new mongoose.Schema({
-    name: { type: String, required: true, trim: true },
-    email: { type: String, required: true, trim: true, lowercase: true },
-    subject: { type: String, default: 'No Subject', trim: true },
-    message: { type: String, required: true, trim: true },
-    createdAt: { type: Date, default: Date.now },
-    isRead: { type: Boolean, default: false }
-});
+// Serve static files from Frontend folder
+app.use(express.static(path.join(__dirname, '../Frontend')));
 
-const Contact = mongoose.model('Contact', contactSchema);
+// Email configuration
+const EMAIL_USER = 'justin.fds2005@gmail.com';
+const EMAIL_PASS = 'jepjkquzdunduzjg';
 
-// ============================================
-// EMAIL SETUP
-// ============================================
 const transporter = nodemailer.createTransport({
     service: 'gmail',
-    auth: { user: EMAIL_USER, pass: EMAIL_PASS }
+    auth: {
+        user: EMAIL_USER,
+        pass: EMAIL_PASS
+    }
 });
 
-// ============================================
-// API ROUTES
-// ============================================
-
-// Root endpoint
-app.get('/', (req, res) => {
-    res.json({
-        success: true,
-        message: 'Justin Fernandes Portfolio API',
-        mongodb: mongoose.connection.readyState === 1 ? 'Connected' : 'Disconnected',
-        endpoints: {
-            'POST /api/contact': 'Submit contact form',
-            'GET /api/messages': 'Get all messages',
-            'GET /api/messages/:id': 'Get single message',
-            'DELETE /api/messages/:id': 'Delete message'
-        }
-    });
+// Test endpoint
+app.get('/api/test', (req, res) => {
+    res.json({ success: true, message: 'API is working!' });
 });
 
-// Submit contact form
+// Contact form endpoint
 app.post('/api/contact', async (req, res) => {
+    console.log('\n📨 Contact request received');
+    console.log('Body:', req.body);
+
     try {
         const { name, email, subject, message } = req.body;
-        
-        console.log('\n📨 New submission:', { name, email });
-        
-        // Validate
+
+        // Validation
         if (!name || name.length < 2) {
             return res.status(400).json({ success: false, message: 'Name must be at least 2 characters' });
         }
@@ -84,95 +63,72 @@ app.post('/api/contact', async (req, res) => {
         if (!message || message.length < 5) {
             return res.status(400).json({ success: false, message: 'Message must be at least 5 characters' });
         }
-        
-        // Save to MongoDB
-        const contact = new Contact({ name, email, subject: subject || 'No Subject', message });
-        await contact.save();
-        console.log('✅ Saved to MongoDB');
-        
-        // Send email notification
+
+        console.log(`Name: ${name}`);
+        console.log(`Email: ${email}`);
+        console.log(`Subject: ${subject || 'No Subject'}`);
+
+        // Send email to you
+        await transporter.sendMail({
+            from: EMAIL_USER,
+            to: EMAIL_USER,
+            subject: `🔔 Portfolio Contact: ${subject || 'New Message'} from ${name}`,
+            text: `Name: ${name}\nEmail: ${email}\nSubject: ${subject || 'No Subject'}\n\nMessage:\n${message}\n\nTime: ${new Date().toLocaleString()}`
+        });
+
+        // Send auto-reply
+        await transporter.sendMail({
+            from: EMAIL_USER,
+            to: email,
+            subject: 'Thank you for contacting Justin Fernandes',
+            text: `Hi ${name},\n\nThank you for reaching out! I've received your message and will get back to you within 24-48 hours.\n\nBest regards,\nJustin Fernandes\nMean Stack Developer & Cybersecurity Enthusiast`
+        });
+
+        console.log('✅ Emails sent successfully');
+
+        // Save to Firebase Firestore
         try {
-            // Email to you
-            await transporter.sendMail({
-                from: EMAIL_USER,
-                to: EMAIL_USER,
-                subject: `🔔 New message from ${name}`,
-                text: `Name: ${name}\nEmail: ${email}\nSubject: ${subject || 'No Subject'}\n\nMessage:\n${message}\n\nTime: ${new Date().toLocaleString()}`
+            const docRef = await addDoc(collection(db, "contacts"), {
+                name,
+                email,
+                subject: subject || 'No Subject',
+                message,
+                timestamp: serverTimestamp()
             });
-            
-            // Auto-reply
-            await transporter.sendMail({
-                from: EMAIL_USER,
-                to: email,
-                subject: 'Thank you for contacting Justin Fernandes',
-                text: `Hi ${name},\n\nThank you for your message! I will get back to you within 24-48 hours.\n\nBest regards,\nJustin Fernandes`
-            });
-            console.log('✅ Emails sent');
-        } catch (emailError) {
-            console.log('⚠️ Email error:', emailError.message);
+            console.log("✅ Document written to Firebase with ID: ", docRef.id);
+        } catch (e) {
+            console.error("❌ Error adding document to Firebase: ", e);
+            // Non-fatal error, we still want to return success for email
         }
-        
-        // Console output
-        console.log(`✅ Message from ${name} saved & notified`);
-        
+
         res.json({
             success: true,
-            message: 'Your message has been sent successfully!',
-            data: { id: contact._id, name: contact.name, createdAt: contact.createdAt }
+            message: 'Your message has been sent successfully! I\'ll get back to you soon.'
         });
-        
+
     } catch (error) {
-        console.error('❌ Error:', error);
-        res.status(500).json({ success: false, message: 'Server error. Please try again.' });
+        console.error('❌ Error:', error.message);
+        res.status(500).json({
+            success: false,
+            message: 'Server error. Please try again or email me directly at justin.fds2005@gmail.com'
+        });
     }
 });
 
-// Get all messages
-app.get('/api/messages', async (req, res) => {
-    try {
-        const messages = await Contact.find().sort({ createdAt: -1 });
-        res.json({ success: true, count: messages.length, data: messages });
-    } catch (error) {
-        res.status(500).json({ success: false, message: 'Failed to fetch messages' });
-    }
+// Serve index.html for all other routes
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, '../Frontend', 'index.html'));
 });
 
-// Get single message
-app.get('/api/messages/:id', async (req, res) => {
-    try {
-        const message = await Contact.findById(req.params.id);
-        if (!message) return res.status(404).json({ success: false, message: 'Not found' });
-        res.json({ success: true, data: message });
-    } catch (error) {
-        res.status(500).json({ success: false, message: 'Failed to fetch' });
-    }
-});
-
-// Delete message
-app.delete('/api/messages/:id', async (req, res) => {
-    try {
-        const deleted = await Contact.findByIdAndDelete(req.params.id);
-        if (!deleted) return res.status(404).json({ success: false, message: 'Not found' });
-        res.json({ success: true, message: 'Deleted successfully' });
-    } catch (error) {
-        res.status(500).json({ success: false, message: 'Failed to delete' });
-    }
-});
-
-// ============================================
-// START SERVER
-// ============================================
-
-// Try to connect to MongoDB, but start server even if it fails
-mongoose.connect(MONGODB_URI)
-    .then(() => console.log('\n✅ MongoDB Connected successfully!'))
-    .catch(err => console.log('\n⚠️ MongoDB not running:', err.message));
-
-app.listen(PORT, () => {
+// Start server
+app.listen(PORT, '0.0.0.0', () => {
     console.log('\n========================================');
-    console.log(`🚀 Server running on http://localhost:${PORT}`);
+    console.log('🚀 JUSTIN FERNANDES PORTFOLIO SERVER');
     console.log('========================================');
-    console.log('📧 Email: justin.fds2005@gmail.com');
-    console.log('💾 MongoDB: localhost:27017/justin_portfolio');
+    console.log(`✅ Server running at:`);
+    console.log(`   http://localhost:${PORT}`);
+    console.log(`   http://127.0.0.1:${PORT}`);
+    console.log('========================================');
+    console.log('📧 Email notifications: ACTIVE');
     console.log('========================================\n');
 });
